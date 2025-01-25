@@ -31,7 +31,7 @@ def page(request):
 
 
 def submitted(request):
-    return HttpResponse("Submitted")
+    return render(request, 'survey/submitted.html')
 
 def view_report(request):
     activities = Activities.objects.all()
