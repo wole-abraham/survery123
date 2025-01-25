@@ -23,7 +23,7 @@ class Activities(models.Model):
         return f'{self.project_name} - {self.date_of_activity}'
     
 class ActivityPhoto(models.Model):
-    activity = models.ForeignKey(Activities, on_delete=models.CASCADE)
+    activity = models.ForeignKey(Activities, on_delete=models.CASCADE, related_name='photos')
     image = models.ImageField(upload_to='photos/')
 
     def __str__(self):
