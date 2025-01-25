@@ -43,6 +43,10 @@
             <label for="id_project_name">Project Name</label>
             {{ form.project_name|add_class:"form-control" }}
         </div>
+        <div class="form-group">
+            <label for="id_project_section">Project Section</label>
+            {{ form.project_section|add_class:"form-control" }}
+        </div>
 
         <div class="form-group">
             <label for="id_planned_activity_category">What is the Planned Activity Category ?</label>
@@ -172,6 +176,26 @@
                 
                 // Add new options based on the returned data
                 data.activities.forEach(function(activity) {
+                    var option = document.createElement('option');
+                    option.value = activity;
+                    option.textContent = activity;
+                    activitySelect.appendChild(option);
+                });
+            });
+    });
+    document.getElementById('id_project_name').addEventListener('change', function() {
+        var ProjectSelect = this
+        var Project = ProjectSelect.options[ProjectSelect.selectedIndex].text;  
+
+        // Make an AJAX request to fetch related activities
+        fetch(`/get-sections/${Project}`)
+            .then(response => response.json())
+            .then(data => {
+                var activitySelect = document.getElementById('id_project_section');
+                activitySelect.innerHTML = '';  // Clear previous options
+                
+                // Add new options based on the returned data
+                data.projects.forEach(function(activity) {
                     var option = document.createElement('option');
                     option.value = activity;
                     option.textContent = activity;

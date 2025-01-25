@@ -200,4 +200,31 @@ activities = {
     ]
 }
 
+
+project_section =  {
+    "Coastal road": [
+        "section 1-A",
+        "section 1-B",
+        "section 1-C",
+        "Section 2",
+        "Calabar section",
+    ],
+    "Sokoto road": [
+        "A-A",
+        "A-B",
+    ],
+    "Benin road": [
+        "B-A",
+        "B-B",
+        "B-C",
+    ],
+    "Abuja road": [
+        "C-A",
+        "C-B",
+        "C-C",
+    ]
+}
+
+
 activitiess = [(f'{y}', f'{y}') for x in activities.values() for y in x]
+project_sections = [(f'{y}', f'{y}') for x in project_section.values() for y in x]

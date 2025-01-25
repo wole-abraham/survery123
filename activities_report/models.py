@@ -7,6 +7,7 @@ class Activities(models.Model):
 
     date_of_activity = models.DateTimeField(default=datetime.now())
     project_name = models.CharField(choices=choices.project_choice, max_length=100)
+    project_section = models.CharField(choices=choices.project_sections, max_length=100, null=True)
     planned_activity_category = models.CharField(choices=choices.activities_category, max_length=100, default=choices.activities_category[0])
     activity_type = models.CharField(choices=choices.activitiess, max_length=100, null=True)
     comment = models.TextField(null=True)

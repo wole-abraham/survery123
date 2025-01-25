@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from .forms import Survey, ActivityPhotoForm, ActivityVideoForm
 from .models import Activities, ActivityPhoto, ActivityVideo
 from django.http import HttpResponse
-from .choices import activities
+from .choices import activities, project_section
 from django.http import JsonResponse
 
 def page(request):
@@ -35,6 +35,10 @@ def page(request):
 def get_activity(request, category):
     activities_list = activities.get(category)
     return JsonResponse({'activities': activities_list})
+
+def get_section(request, project):
+    project_list = project_section.get(project)
+    return JsonResponse({'projects': project_list})
 
 
 def submitted(request):
