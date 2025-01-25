@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.conf.urls.static import static
 from django.conf import settings
 from django.urls import path, include
-from activities_report.views import page, submitted, view_report
+from activities_report.views import page, submitted, view_report, get_activity
 
 from rest_framework.routers import DefaultRouter
 from activities_report.views import ActivityViewSet, ActivityPhotoViewSet, ActivityVideoViewSet
@@ -34,7 +34,8 @@ urlpatterns = [
     path('submitted/', submitted, name='submitted'),
     path('report/', view_report, name='report'),
     path('', page, name='page'),
-    path('api/', include(router.urls))
+    path('api/', include(router.urls)),
+    path('get-activities/<str:category>', get_activity, name='get-activity')
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

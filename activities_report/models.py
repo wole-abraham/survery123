@@ -8,7 +8,7 @@ class Activities(models.Model):
     date_of_activity = models.DateTimeField(default=datetime.now())
     project_name = models.CharField(choices=choices.project_choice, max_length=100)
     planned_activity_category = models.CharField(choices=choices.activities_category, max_length=100, default=choices.activities_category[0])
-    # activity_type = models.Choices
+    activity_type = models.CharField(choices=choices.activitiess, max_length=100, null=True)
     comment = models.TextField(null=True)
     chainage = models.CharField(choices=choices.chanage, max_length=100, null=True)
     chainage2 = models.CharField(choices=choices.chanage2, max_length=100, null=True)

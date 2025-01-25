@@ -2,7 +2,8 @@ from django.shortcuts import render, redirect
 from .forms import Survey, ActivityPhotoForm, ActivityVideoForm
 from .models import Activities, ActivityPhoto, ActivityVideo
 from django.http import HttpResponse
-
+from .choices import activities
+from django.http import JsonResponse
 
 def page(request):
 
@@ -21,6 +22,8 @@ def page(request):
                 ActivityVideo.objects.create(activity=activity, video=file)
 
             return redirect('submitted')  # Replace with your desired success URL
+        else:
+            print('not valdi')
 
     else:
         survey_form = Survey()
@@ -28,6 +31,10 @@ def page(request):
     return render(request, 'survey/form.html', {
         'form': survey_form,
     })
+
+def get_activity(request, category):
+    activities_list = activities.get(category)
+    return JsonResponse({'activities': activities_list})
 
 
 def submitted(request):

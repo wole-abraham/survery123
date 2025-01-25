@@ -11,7 +11,7 @@ class Survey(forms.ModelForm):
             'date_of_activity': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
             'comment': forms.Textarea(attrs={'rows': 4}),
         }
-
+    activity_type = forms.ChoiceField(choices=[], required=True)
 
 class ActivityPhotoForm(forms.ModelForm):
     class Meta:
