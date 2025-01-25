@@ -1,0 +1,65 @@
+from django.shortcuts import render, redirect
+from .forms import Survey, ActivityPhotoForm, ActivityVideoForm
+from .models import Activities, ActivityPhoto, ActivityVideo
+from django.http import HttpResponse
+
+
+def page(request):
+
+    if request.method == 'POST':
+        survey_form = Survey(request.POST)
+        if survey_form.is_valid():
+            # Save the activity
+            activity = survey_form.save()
+
+            # Handle photo uploads
+            for file in request.FILES.getlist('photos'):
+                ActivityPhoto.objects.create(activity=activity, image=file)
+
+            # Handle video uploads
+            for file in request.FILES.getlist('videos'):
+                ActivityVideo.objects.create(activity=activity, video=file)
+
+            return redirect('submitted')  # Replace with your desired success URL
+
+    else:
+        survey_form = Survey()
+
+    return render(request, 'survey/form.html', {
+        'form': survey_form,
+    })
+
+
+def submitted(request):
+    return HttpResponse("Submitted")
+
+def view_report(request):
+    activities = Activities.objects.all()
+    return render(request, 'survey/view_reports.html', context={'activities': activities})
+
+
+# API
+
+from rest_framework import viewsets
+from .serializers import ActivitySerializer, ActivityPhotoSerializer, ActivityVideoSerializer
+
+
+class ActivityViewSet(viewsets.ModelViewSet):
+    queryset = Activities.objects.all()
+    serializer_class = ActivitySerializer
+
+class ActivityPhotoViewSet(viewsets.ModelViewSet):
+    queryset = ActivityPhoto.objects.all()
+    serializer_class = ActivityPhotoSerializer
+
+    def perform_create(self, serializer):
+        activity = Activities.objects.get(id=self.kwargs['activity_id'])
+        serializer.save(activity=activity)
+
+class ActivityVideoViewSet(viewsets.ModelViewSet):
+    queryset = ActivityVideo.objects.all()
+    serializer_class = ActivityVideoSerializer
+
+    def perform_create(self, serializer):
+        activity = Activities.objects.get(id=self.kwargs['activity_id'])
+        serializer.save(activity=activity)

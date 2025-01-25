@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Activity Reports</title>
+    <style>
+        /* Base Styling */
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f3f3f3;  /* Light Neutral Background */
+            color: #333;
+        }
+
+        .container {
+            width: 85%;
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 20px;
+            background: #ffffff;  /* White background for reports */
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .report {
+            margin-bottom: 40px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            background-color: #fff;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        /* Main Heading for Reports */
+        .report-title {
+            font-size: 2.2em;
+            font-weight: 600;
+            color: #2d6a4f;  /* Green - Complementary Color to Peach */
+            margin-bottom: 12px;
+        }
+
+        .report-header {
+            background-color: #fae1dd;  /* Light Peach/Coral Background */
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .report-header strong {
+            font-weight: bold;
+            color: #d84e3d;  /* Darker Coral Color for Contrast */
+        }
+
+        /* List Details */
+        .report-details {
+            list-style: none;
+            padding: 0;
+            margin-bottom: 20px;
+            font-size: 1.1em;
+            color: #555;
+        }
+
+        .report-details li {
+            margin-bottom: 8px;
+        }
+
+        /* Image Gallery */
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 16px;
+            padding: 20px 0;
+        }
+
+        .gallery img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .gallery img:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Video Section */
+        .video {
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        .video video {
+            max-width: 100%;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Footer Styling (for additional info or links) */
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 20px;
+            background-color: #d4e157;  /* Light Green Background */
+            color: white;
+            border-radius: 12px;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        {% for report in activities %}
+        <div class="report">
+            <div class="report-title">{{ report.project_name }}</div>
+            
+            <div class="report-header">
+                <ul class="report-details">
+                    <li><strong>Date of Activity:</strong> {{ report.date_of_activity }}</li>
+                    <li><strong>Planned Activity Category:</strong> {{ report.planned_activity_category }}</li>
+                    <li><strong>Comment:</strong> {{ report.comment }}</li>
+                </ul>
+            </div>
+
+            <!-- Gallery for Images -->
+            <div class="gallery">
+                {% for image in report.activityphoto_set.all %}
+                    <img src="{{ image.image.url }}" alt="Activity Photo">
+                {% endfor %}
+            </div>
+
+            <!-- Video (if exists) -->
+            <!-- {% if report.videos.all %}
+                <div class="video">
+                    <h3>Activity Video</h3>
+                    {% for video in report.videos.all %}
+                        <video controls>
+                            <source src="{{ video.video.url }}" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                    {% endfor %}
+                </div>
+            {% endif %} -->
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Footer Section (Optional) -->
+    <footer>
+        <p>&copy; 2025 Your Company | All rights reserved</p>
+    </footer>
+</body>
+</html>

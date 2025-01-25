@@ -1,0 +1,159 @@
+<!-- activity_form.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load widget_tweaks %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Activity</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+    <style>
+        .form-group label {
+            font-weight: bold;
+        }
+        .btn-primary {
+            width: 100%;
+        }
+
+        .input {
+            color: green;
+        }
+ 
+
+    </style>
+</head>
+<body>
+
+<div class="container" style="margin: 10px;">
+    <div class="head">
+        <h4 style="background-color: green; padding: 3px; color: white; border-radius: 4px; text-align: left;">Activities Report</h1>
+    </div>
+    
+    
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        
+        <div class="form-group">
+            <label for="id_date_of_activity">Date of Activity</label>
+            {{ form.date_of_activity|add_class:"form-control" }}
+        </div>
+    
+        <div class="form-group">
+            <label for="id_project_name">Project Name</label>
+            {{ form.project_name|add_class:"form-control" }}
+        </div>
+
+        <div class="form-group">
+            <label for="id_planned_activity_category">What is the Planned Activity Category ?</label>
+            {{ form.planned_activity_category|add_class:"form-control" }}
+        </div>
+        <div class="form-group">
+            <label for="id_planned_activity_category">Chainage</label>
+            {{ form.chainage|add_class:"form-control" }}
+        </div>
+        <div class="form-group">
+            <label for="id_planned_activity_category">Chainage_2</label>
+            {{ form.chainage2|add_class:"form-control" }}
+        </div>
+    
+        <div class="form-group">
+            <label for="id_comment">Comment</label>
+            {{ form.comment|add_class:"form-control" }}
+        </div>
+    
+        <div class="form-group" id="machine_owner">
+          <div class="machine_owner" style="display: flex; margin-bottom: 4px;">
+                <div class="machine">
+                    <label for="">Machine</label>
+                    {{ form.machines|add_class:"form-control" }}
+                </div>
+                <!--  --------------------------------->
+                <div class="owner">
+                    <label for="">Owner</label>
+                    {{ form.machines_source|add_class:"form-control" }}
+                </div>
+
+            </div>
+        
+        </div>
+        <button 
+        type="button" 
+        id="add_more" 
+        class="btn btn-info btn-sm"
+        style="border-radius: 50px; padding: 5px 20px; font-size: 14px; font-weight: bold; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);"
+    >
+        <i class="fas fa-plus"></i> Add More
+    </button>
+    
+        <div class="form-group">
+            <label for="id_site_engineer">Site Engineer</label>
+            {{ form.site_engineer|add_class:"form-control" }}
+        </div>
+    
+        <div class="form-group">
+            <label for="id_supervisor">Site Supervisor</label>
+            {{ form.supervisor|add_class:"form-control" }}
+        </div>
+    
+        <div class="form-group">
+            <label for="id_party">Which party has been engaged in carrying out the activity supervision?*</label>
+            {{ form.party|add_class:"form-control" }}
+        </div>
+    
+        <div class="form-group">
+            <label for="id_supervision">Supervisors</label>
+            {{ form.supervision|add_class:"form-control" }}
+        </div>
+    
+        <div class="form-group">
+            <label for="id_machines_source">Machines Source</label>
+            {{ form.machines_source|add_class:"form-control" }}
+        </div>
+    
+      
+    
+        <div class="text-center">
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+        <label for="photos">Upload Photos:</label>
+        <input type="file" name="photos" multiple>
+
+        <label for="videos">Upload Videos:</label>
+        <input type="file" name="videos" multiple>
+
+        <button type="submit">Submit</button>
+    </form>
+    
+</div>
+
+<!-- Bootstrap JS (Optional for extra features like tooltips or modals) -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+
+<script>
+    function duplicate() {
+        // Select the element to clone
+        const original = document.querySelector('.machine_owner');
+
+        // Clone the node
+        const clone = original.cloneNode(true);
+
+        // Clear input values in the clone
+        clone.querySelectorAll('input, select').forEach(input => {
+            input.value = '';
+        });
+
+        // Append the clone to the container
+        document.querySelector('#machine_owner').appendChild(clone);
+    }
+
+    // Add event listener to the button
+    const machine = document.getElementById('add_more');
+    machine.addEventListener('click', duplicate);
+</script>
+
+</body>
+</html>
