@@ -19,7 +19,7 @@ class Survey(forms.ModelForm):
         # Ensure the input matches the desired format
         self.fields['date_of_activity'].input_formats = ['%Y-%m-%dT%H:%M']
 
-    activity_type = forms.ChoiceField(choices=activitiess, required=True)
+    activity_type = forms.ChoiceField(choices=activitiess, required=False)
     project_section = forms.ChoiceField(choices=project_sections, required=True)
 
 class ActivityPhotoForm(forms.ModelForm):

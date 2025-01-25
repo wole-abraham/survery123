@@ -1,4 +1,3 @@
-<!-- activity_form.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,204 +6,219 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Create Activity</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 
     <style>
+        body {
+            background-color: #f9f9f9;
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-top: 30px;
+        }
+
+        .head {
+            margin-bottom: 20px;
+        }
+
+        .head h4 {
+            background-color: #28a745;
+            padding: 10px;
+            color: white;
+            border-radius: 4px;
+            text-align: center;
+        }
+
         .form-group label {
             font-weight: bold;
         }
+
         .btn-primary {
             width: 100%;
+            background-color: #007bff;
+            border-color: #007bff;
+            font-size: 16px;
+            padding: 10px;
+            border-radius: 4px;
         }
 
-        .input {
-            color: green;
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #0056b3;
         }
- 
 
+        .btn-info {
+            margin-top: 10px;
+        }
+
+        input[type="file"] {
+            margin-bottom: 20px;
+        }
+
+        .machine {
+            flex: 1;
+            margin-right: 10px;
+        }
+
+        .owner {
+            flex: 1;
+        }
+
+        .machine_owner {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
     </style>
 </head>
 <body>
-
-<div class="container" style="margin: 10px;">
+<div class="container">
     <div class="head">
-        <h4 style="background-color: green; padding: 3px; color: white; border-radius: 4px; text-align: left;">Activities Report</h1>
+        <h4>Activities Report</h4>
     </div>
-    
-    
+
     <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
-        
+
         <div class="form-group">
             <label for="id_date_of_activity">Date of Activity</label>
             {{ form.date_of_activity|add_class:"form-control" }}
         </div>
-    
+
         <div class="form-group">
             <label for="id_project_name">Project Name</label>
             {{ form.project_name|add_class:"form-control" }}
         </div>
+
         <div class="form-group">
             <label for="id_project_section">Project Section</label>
             {{ form.project_section|add_class:"form-control" }}
         </div>
 
         <div class="form-group">
-            <label for="id_planned_activity_category">What is the Planned Activity Category ?</label>
+            <label for="id_planned_activity_category">Planned Activity Category</label>
             {{ form.planned_activity_category|add_class:"form-control" }}
         </div>
+
         <div class="form-group">
-            <label for="id_planned_activity_category">Activity Type</label>
+            <label for="id_activity_type">Activity Type</label>
             {{ form.activity_type|add_class:"form-control" }}
         </div>
+
         <div class="form-group">
-            <label for="id_planned_activity_category">Chainage</label>
+            <label for="id_chainage">Chainage</label>
             {{ form.chainage|add_class:"form-control" }}
         </div>
+
         <div class="form-group">
-            <label for="id_planned_activity_category">Chainage_2</label>
+            <label for="id_chainage2">Chainage 2</label>
             {{ form.chainage2|add_class:"form-control" }}
         </div>
-    
+
         <div class="form-group">
             <label for="id_comment">Comment</label>
             {{ form.comment|add_class:"form-control" }}
         </div>
-    
-        <div class="form-group" id="machine_owner">
-          <div class="machine_owner" style="display: flex; margin-bottom: 4px;">
+
+        <div id="machine_owner">
+            <div class="machine_owner">
                 <div class="machine">
                     <label for="">Machine</label>
                     {{ form.machines|add_class:"form-control" }}
                 </div>
-                <!--  --------------------------------->
+
                 <div class="owner">
                     <label for="">Owner</label>
                     {{ form.machines_source|add_class:"form-control" }}
                 </div>
-
             </div>
-        
         </div>
-        <button 
-        type="button" 
-        id="add_more" 
-        class="btn btn-info btn-sm"
-        style="border-radius: 50px; padding: 5px 20px; font-size: 14px; font-weight: bold; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);"
-    >
-        <i class="fas fa-plus"></i> Add More
-    </button>
-    
+
+        <button type="button" id="add_more" class="btn btn-info btn-sm">
+            <i class="fas fa-plus"></i> Add More
+        </button>
+
         <div class="form-group">
             <label for="id_site_engineer">Site Engineer</label>
             {{ form.site_engineer|add_class:"form-control" }}
         </div>
-    
+
         <div class="form-group">
             <label for="id_supervisor">Site Supervisor</label>
             {{ form.supervisor|add_class:"form-control" }}
         </div>
-    
+
         <div class="form-group">
-            <label for="id_party">Which party has been engaged in carrying out the activity supervision?*</label>
+            <label for="id_party">Activity Supervision Party</label>
             {{ form.party|add_class:"form-control" }}
         </div>
-    
+
         <div class="form-group">
             <label for="id_supervision">Supervisors</label>
             {{ form.supervision|add_class:"form-control" }}
         </div>
-    
-        <div class="form-group">
-            <label for="id_machines_source">Machines Source</label>
-            {{ form.machines_source|add_class:"form-control" }}
-        </div>
-    
-      
-    
-        
+
         <label for="photos">Upload Photos:</label>
-        <input type="file" name="photos" multiple>
+        <input type="file" name="photos" multiple class="form-control">
 
         <label for="videos">Upload Videos:</label>
-        <input type="file" name="videos" multiple>
+        <input type="file" name="videos" multiple class="form-control">
 
         <div class="text-center">
             <button type="submit" class="btn btn-primary">Submit</button>
         </div>
     </form>
-    
 </div>
 
-<!-- Bootstrap JS (Optional for extra features like tooltips or modals) -->
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
-
 <script>
     function duplicate() {
-        // Select the element to clone
         const original = document.querySelector('.machine_owner');
-
-        // Clone the node
         const clone = original.cloneNode(true);
-
-        // Clear input values in the clone
-        clone.querySelectorAll('input, select').forEach(input => {
-            input.value = '';
-        });
-
-        // Append the clone to the container
+        clone.querySelectorAll('input, select').forEach(input => input.value = '');
         document.querySelector('#machine_owner').appendChild(clone);
     }
 
-    // Add event listener to the button
-    const machine = document.getElementById('add_more');
-    machine.addEventListener('click', duplicate);
-
+    document.getElementById('add_more').addEventListener('click', duplicate);
 
     document.getElementById('id_planned_activity_category').addEventListener('change', function() {
-        var categorySelect = this
-        var category = categorySelect.options[categorySelect.selectedIndex].text;  
-
-        // Make an AJAX request to fetch related activities
+        const category = this.options[this.selectedIndex].text;
         fetch(`/get-activities/${category}`)
             .then(response => response.json())
             .then(data => {
-                var activitySelect = document.getElementById('id_activity_type');
-                activitySelect.innerHTML = '';  // Clear previous options
-                
-                // Add new options based on the returned data
-                data.activities.forEach(function(activity) {
-                    var option = document.createElement('option');
+                const activitySelect = document.getElementById('id_activity_type');
+                activitySelect.innerHTML = '';
+                data.activities.forEach(activity => {
+                    const option = document.createElement('option');
                     option.value = activity;
                     option.textContent = activity;
                     activitySelect.appendChild(option);
                 });
             });
     });
-    document.getElementById('id_project_name').addEventListener('change', function() {
-        var ProjectSelect = this
-        var Project = ProjectSelect.options[ProjectSelect.selectedIndex].text;  
 
-        // Make an AJAX request to fetch related activities
-        fetch(`/get-sections/${Project}`)
+    document.getElementById('id_project_name').addEventListener('change', function() {
+        const project = this.options[this.selectedIndex].text;
+        fetch(`/get-sections/${project}`)
             .then(response => response.json())
             .then(data => {
-                var activitySelect = document.getElementById('id_project_section');
-                activitySelect.innerHTML = '';  // Clear previous options
-                
-                // Add new options based on the returned data
-                data.projects.forEach(function(activity) {
-                    var option = document.createElement('option');
-                    option.value = activity;
-                    option.textContent = activity;
-                    activitySelect.appendChild(option);
+                const sectionSelect = document.getElementById('id_project_section');
+                sectionSelect.innerHTML = '';
+                data.projects.forEach(section => {
+                    const option = document.createElement('option');
+                    option.value = section;
+                    option.textContent = section;
+                    sectionSelect.appendChild(option);
                 });
             });
     });
-
 </script>
-
 </body>
 </html>
