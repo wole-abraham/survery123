@@ -23,7 +23,7 @@ def page(request):
 
             return redirect('submitted')  # Replace with your desired success URL
         else:
-            print('not valdi')
+            print(survey_form.errors)
 
     else:
         survey_form = Survey()

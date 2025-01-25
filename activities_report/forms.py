@@ -1,6 +1,6 @@
 from django import forms
 from .models import Activities, ActivityPhoto, ActivityVideo
-from .choices import machines
+from .choices import machines, activitiess
 
 
 class Survey(forms.ModelForm):
@@ -11,7 +11,7 @@ class Survey(forms.ModelForm):
             'date_of_activity': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
             'comment': forms.Textarea(attrs={'rows': 4}),
         }
-    activity_type = forms.ChoiceField(choices=[], required=True)
+    activity_type = forms.ChoiceField(choices=activitiess, required=True)
 
 class ActivityPhotoForm(forms.ModelForm):
     class Meta:
