@@ -11,7 +11,13 @@ def page(request):
         survey_form = Survey(request.POST)
         if survey_form.is_valid():
             # Save the activity
-            activity = survey_form.save()
+
+            if survey_form.cleaned_data.get('team_car_option') == 'no':
+                activity = survey_form.save(commit=False)
+                activity.team_car = None
+                activity.save()
+            else:
+                activity = survey_form.save()
 
             # Handle photo uploads
             for file in request.FILES.getlist('photos'):

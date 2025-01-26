@@ -224,7 +224,73 @@ project_section =  {
         "C-C",
     ]
 }
+names = [
+    ("MATTHEW EMEKA", "MATTHEW EMEKA"),
+    ("JOHN BOGHA", "JOHN BOGHA"),
+    ("GABRIEL ANYIN UDE", "GABRIEL ANYIN UDE"),
+    ("ADEBAYO WILLIAMS", "ADEBAYO WILLIAMS"),
+    ("ADEWUYI ADEDIRE", "ADEWUYI ADEDIRE"),
+    ("MICHAEL NWANKWO", "MICHAEL NWANKWO"),
+    ("CLEMENT JOHN", "CLEMENT JOHN"),
+    ("OYEBOADE OLAYIDE TIMOTHY", "OYEBOADE OLAYIDE TIMOTHY"),
+    ("AZUBUIKE PRINCE", "AZUBUIKE PRINCE"),
+    ("NWIDUM JAMES", "NWIDUM JAMES"),
+    ("OLULADE TOMIWA", "OLULADE TOMIWA"),
+    ("STEPHEN BENJAMIN", "STEPHEN BENJAMIN"),
+    ("MOJEED OLUMIDE", "MOJEED OLUMIDE"),
+    ("DUROJAYE SUNDAY", "DUROJAYE SUNDAY"),
+    ("OLUWATOBI SAMUEL", "OLUWATOBI SAMUEL"),
+    ("GABRIEL", "GABRIEL"),
+    ("JIMOH KABIR", "JIMOH KABIR"),
+    ("Tobe", "Tobe"),
+    ("NWACHUKWU CHIJIOKE", "NWACHUKWU CHIJIOKE"),
+    ("ABU BAKER", "ABU BAKER"),
+    ("Stanley Okpetu", "Stanley Okpetu"),
+    ("Oluwagbemiro Temidayo Stephen", "Oluwagbemiro Temidayo Stephen"),
+    ("Olaniyi", "Olaniyi"),
+    ("Alex", "Alex"),
+    ("Hassan", "Hassan"),
+    ("AYO", "AYO"),
+    ("Believe", "Believe"),
+    ("TONY", "TONY"),
+    ("BUKOLA", "BUKOLA"),
+    ("ADERONKE", "ADERONKE"),
+    ("SODIQ", "SODIQ"),
+    ("TONY", "TONY"),
+    ("Habib", "Habib"),
+    ("Abdulazeez", "Abdulazeez"),
+    ("Celestino", "Celestino"),
+]
 
+roles = [
+    ("PRO", "PRO"),
+    ("Surveyor", "Surveyor"),
+    ("Chain Boy", "Chain Boy"),
+    ("Excavator Operator", "Excavator Operator"),
+    ("Dozer Operator", "Dozer Operator"),
+    ("Driver", "Driver"),
+    ("Securities", "Securities"),
+    ("Forman", "Forman"),
+    ("Roller Operator", "Roller Operator"),
+    ("Mechanic", "Mechanic"),
+    ("Electrician", "Electrician"),
+    ("Grader Operator", "Grader Operator"),
+    ("Swamp buggy operator", "Swamp buggy operator"),
+    ("Canoe operator", "Canoe operator"),
+    ("Engineer", "Engineer"),
+]
+
+team_cars = [
+    ("NISSAN (KRD-704-YG) BLACK", "NISSAN (KRD-704-YG) BLACK"),
+    ("TOYOTA RENTAL (EPE-938GY)", "TOYOTA RENTAL (EPE-938GY)"),
+    ("TOYOTA RENTAL (EPE-939GY)", "TOYOTA RENTAL (EPE-939GY)"),
+]
+
+subcontractor_names = [
+    ("Zenith", "Zenith"),
+    ("SPG", "SPG"),
+    ("Multi road", "Multi road"),
+]
 
 activitiess = [(f'{y}', f'{y}') for x in activities.values() for y in x]
 project_sections = [(f'{y}', f'{y}') for x in project_section.values() for y in x]

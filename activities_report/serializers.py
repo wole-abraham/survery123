@@ -22,9 +22,4 @@ class ActivitySerializer(serializers.ModelSerializer):
 
         class Meta:
               model = Activities
-              fields = [
-            'id', 'project_name','project_section', 'date_of_activity', 'planned_activity_category',
-            'activity_type',
-            'comment', 'chainage', 'chainage2', 'site_engineer', 'supervisor',
-            'party', 'supervision', 'machines', 'machines_source', 'photos', 'videos'
-        ]
+              fields = '__all__'
