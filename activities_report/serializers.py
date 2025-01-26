@@ -4,7 +4,7 @@ from .models import Activities, ActivityPhoto, ActivityVideo
 class ActivityPhotoSerializer(serializers.ModelSerializer):
     class Meta:
         model = ActivityPhoto
-        fields = ['id', 'image']
+        fields = ['id', 'image', 'activity_id']
     def to_representation(self, instance):
         # You can manually adjust the image URL if necessary
         data = super().to_representation(instance)
@@ -14,7 +14,7 @@ class ActivityPhotoSerializer(serializers.ModelSerializer):
 class ActivityVideoSerializer(serializers.ModelSerializer):
         class Meta:
             model = ActivityVideo
-            fields = ['id', 'video']
+            fields = ['id', 'video', 'activity_id']
     
 class ActivitySerializer(serializers.ModelSerializer):
         photos = ActivityPhotoSerializer(many=True, read_only=True)

@@ -25,8 +25,10 @@ from activities_report.views import ActivityViewSet, ActivityPhotoViewSet, Activ
 
 router = DefaultRouter()
 router.register(r'activities', ActivityViewSet)
-router.register(r'activities/(?P<activity_id>\d+)/photos', ActivityPhotoViewSet)
-router.register(r'activities/(?P<activity_id>\d+)/videos', ActivityVideoViewSet)
+router.register(r'photos', ActivityPhotoViewSet)
+router.register(r'videos', ActivityVideoViewSet)
+# router.register(r'activities/(?P<activity_id>\d+)/photos', ActivityPhotoViewSet)
+# router.register(r'activities/(?P<activity_id>\d+)/videos', ActivityVideoViewSet)
 
 
 urlpatterns = [

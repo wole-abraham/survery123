@@ -32,11 +32,11 @@ class ActivityPhoto(models.Model):
     image = models.ImageField(upload_to='photos/')
 
     def __str__(self):
-        return f"photo for {self.activity.project_name}  - {self.activity.date_of_activity}"
+        return f"photo for {self.activity.id} {self.activity.project_name}  - {self.activity.date_of_activity}"
 
 class ActivityVideo(models.Model):
     activity = models.ForeignKey(Activities, on_delete=models.CASCADE, related_name='videos')
     video = models.FileField(upload_to='videos/')
 
     def __str__(self):
-        return f"Video for {self.activity.project_name} - {self.activity.date_of_activity}"
+        return f"Video for {sel} {self.activity.project_name} - {self.activity.date_of_activity}"
