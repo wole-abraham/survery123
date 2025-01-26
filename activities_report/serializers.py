@@ -5,12 +5,7 @@ class ActivityPhotoSerializer(serializers.ModelSerializer):
     class Meta:
         model = ActivityPhoto
         fields = ['id', 'image', 'activity_id']
-    def to_representation(self, instance):
-        # You can manually adjust the image URL if necessary
-        data = super().to_representation(instance)
-        data['image'] = instance.image.url  # Make sure URL is properly serialized
-        return data
-    
+
 class ActivityVideoSerializer(serializers.ModelSerializer):
         class Meta:
             model = ActivityVideo
