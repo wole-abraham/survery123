@@ -9,6 +9,7 @@ def page(request):
 
     if request.method == 'POST':
         survey_form = Survey(request.POST)
+        print(request.POST)
         if survey_form.is_valid():
             # Save the activity
 

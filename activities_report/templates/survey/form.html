@@ -145,15 +145,16 @@
             {{ form.supervision|add_class:"form-control" }}
         </div>
 
-        <div class="form-group">
-            <label for="id_supervisor">Site Supervisor</label>
-            {{ form.supervisor|add_class:"form-control" }}
+        <div class="form-group"  style="border: 1px solid rgb(137, 129, 129); padding: 10px;">
+            <label for="id_supervisor" style="color: blue; border-bottom: 1px solid black;">Site Supervisors</label>
+            {{ form.supervisors|add_class:"checkbox-list" }}
         </div>
 
-        <div class="form-group">
-            <label for="id_site_engineer">Site Engineer</label>
-            {{ form.site_engineer|add_class:"form-control" }}
+        <div class="form-group" style="border: 1px solid rgb(137, 129, 129); padding: 10px;">
+            <label for="id_site-engineers"  style="color: blue; border-bottom: 1px solid black;">Site Engineers</label>
+            {{ form.site_engineer|add_class:"checkbox-list" }}
         </div>
+    
         <div class="form-group">
             <label for="id_site_engineer">Fullname</label>
             {{ form.fullname|add_class:"form-control" }}
