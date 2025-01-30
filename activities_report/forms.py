@@ -20,10 +20,8 @@ class Survey(forms.ModelForm):
         self.fields['date_of_activity'].input_formats = ['%Y-%m-%dT%H:%M']
 
     activity_type = forms.ChoiceField(choices=activitiess, required=False)
-    supervisors = forms.MultipleChoiceField(choices=supervisor,
-                                           widget=forms.CheckboxSelectMultiple, required=True)
-    site_engineer = forms.MultipleChoiceField(choices=engineers, 
-                                                 widget=forms.CheckboxSelectMultiple, required=True)
+    supervisors = forms.ChoiceField(choices=supervisor)
+    site_engineer = forms.ChoiceField(choices=engineers)
     team_car = forms.ChoiceField(choices=team_cars, required=False)
     team_car_option = forms.ChoiceField(choices=[('yes', 'Yes'), ('no', 'no')])
     project_section = forms.ChoiceField(choices=project_sections, required=True)

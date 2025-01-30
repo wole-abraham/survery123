@@ -60,19 +60,25 @@
             margin-bottom: 20px;
         }
 
-        .machine {
+        .machine, .site_engineer, .site_supervisor {
             flex: 1;
             margin-right: 10px;
         }
 
-        .owner {
+        .owner, .supervision {
             flex: 1;
         }
 
-        .machine_owner {
+        .machine_owner, .site_engineer_row, .site_supervisor_row {
             display: flex;
             gap: 15px;
             margin-bottom: 15px;
+        }
+
+        .machine_owner .form-group,
+        .site_engineer_row .form-group,
+        .site_supervisor_row .form-group {
+            flex: 1;
         }
     </style>
 </head>
@@ -120,8 +126,6 @@
             {{ form.chainage2|add_class:"form-control" }}
         </div>
 
-        
-
         <div id="machine_owner">
             <div class="machine_owner">
                 <div class="machine">
@@ -136,50 +140,76 @@
             </div>
         </div>
 
-        <button type="button" id="add_more" class="btn btn-info btn-sm">
-            <i class="fas fa-plus"></i> Add More
+        <button type="button" id="add_machine_owner" class="btn btn-info btn-sm">
+            <i class="fas fa-plus"></i> Add More Machine/Owner
+        </button>
+
+        <div id="site_engineers">
+            <div class="site_engineer_row">
+                <div class="site_engineer">
+                    <label for="id_site_engineer">Site Engineer</label>
+                    {{ form.site_engineer|add_class:"form-control" }}
+                </div>
+
+                <div class="supervision">
+                    <label for="id_supervision">HiTech / Sub-contractor?</label>
+                    {{ form.supervision|add_class:"form-control" }}
+                </div>
+            </div>
+        </div>
+
+        <button type="button" id="add_site_engineer" class="btn btn-info btn-sm">
+            <i class="fas fa-plus"></i> Add More Site Engineer
+        </button>
+
+        <div id="site_supervisors">
+            <div class="site_supervisor_row">
+                <div class="site_supervisor">
+                    <label for="id_site_supervisor">Site Supervisor</label>
+                    {{ form.supervisors|add_class:"form-control" }}
+                </div>
+
+                <div class="supervision">
+                    <label for="id_supervision_type">Supervision Type</label>
+                    {{ form.supervision|add_class:"form-control" }}
+                </div>
+            </div>
+        </div>
+
+        <button type="button" id="add_site_supervisor" class="btn btn-info btn-sm">
+            <i class="fas fa-plus"></i> Add More Site Supervisor
         </button>
 
         <div class="form-group">
-            <label for="id_supervision">Supervisors</label>
-            {{ form.supervision|add_class:"form-control" }}
-        </div>
-
-        <div class="form-group"  style="border: 1px solid rgb(137, 129, 129); padding: 10px;">
-            <label for="id_supervisor" style="color: blue; border-bottom: 1px solid black;">Site Supervisors</label>
-            {{ form.supervisors|add_class:"checkbox-list" }}
-        </div>
-
-        <div class="form-group" style="border: 1px solid rgb(137, 129, 129); padding: 10px;">
-            <label for="id_site-engineers"  style="color: blue; border-bottom: 1px solid black;">Site Engineers</label>
-            {{ form.site_engineer|add_class:"checkbox-list" }}
-        </div>
-    
-        <div class="form-group">
-            <label for="id_site_engineer">Fullname</label>
+            <label for="id_fullname">Fullname</label>
             {{ form.fullname|add_class:"form-control" }}
         </div>
+
         <div class="form-group">
-            <label for="id_site_engineer">Role</label>
+            <label for="id_role">Role</label>
             {{ form.role|add_class:"form-control" }}
         </div>
+
         <div class="form-group">
-            <label for="id_team_car_option">Was a Team Vehicle used ?</label>
+            <label for="id_team_car_option">Was a Team Vehicle used?</label>
             {{ form.team_car_option|add_class:"form-control" }}
         </div>
-        <div class="form-group">
+
+        <div class="form-group" id="id_team_car" style="display: none;">
             <label for="id_team_car">Team Car</label>
             {{ form.team_car|add_class:"form-control" }}
         </div>
+
         <div class="form-group">
-            <label for="id_team_car">SubContractor Name</label>
+            <label for="id_subcontractor_name">SubContractor Name</label>
             {{ form.subcontractor_name|add_class:"form-control" }}
         </div>
-    
+
         <div class="form-group">
             <label for="id_party">Activity Supervision Party</label>
             {{ form.party|add_class:"form-control" }}
         </div>
+
         <div class="form-group">
             <label for="id_comment">Comment</label>
             {{ form.comment|add_class:"form-control" }}
@@ -201,59 +231,39 @@
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script>
-    function duplicate() {
+    function duplicateMachineOwner() {
         const original = document.querySelector('.machine_owner');
         const clone = original.cloneNode(true);
         clone.querySelectorAll('input, select').forEach(input => input.value = '');
         document.querySelector('#machine_owner').appendChild(clone);
     }
 
-    document.getElementById('add_more').addEventListener('click', duplicate);
+    function duplicateSiteEngineer() {
+        const original = document.querySelector('.site_engineer_row');
+        const clone = original.cloneNode(true);
+        clone.querySelectorAll('input, select').forEach(input => input.value = '');
+        document.querySelector('#site_engineers').appendChild(clone);
+    }
 
-    document.getElementById('id_planned_activity_category').addEventListener('change', function() {
-        const category = this.options[this.selectedIndex].text;
-        fetch(`/get-activities/${category}`)
-            .then(response => response.json())
-            .then(data => {
-                const activitySelect = document.getElementById('id_activity_type');
-                activitySelect.innerHTML = '';
-                data.activities.forEach(activity => {
-                    const option = document.createElement('option');
-                    option.value = activity;
-                    option.textContent = activity;
-                    activitySelect.appendChild(option);
-                });
-            });
-    });
+    function duplicateSiteSupervisor() {
+        const original = document.querySelector('.site_supervisor_row');
+        const clone = original.cloneNode(true);
+        clone.querySelectorAll('input, select').forEach(input => input.value = '');
+        document.querySelector('#site_supervisors').appendChild(clone);
+    }
+
+    document.getElementById('add_machine_owner').addEventListener('click', duplicateMachineOwner);
+    document.getElementById('add_site_engineer').addEventListener('click', duplicateSiteEngineer);
+    document.getElementById('add_site_supervisor').addEventListener('click', duplicateSiteSupervisor);
 
     document.getElementById('id_team_car_option').addEventListener('change', function(){
         const value = this.options[this.selectedIndex].text;
+        const teamCar = document.getElementById('id_team_car');
         if (value === 'no') {
-            console.log('hi');
-            const team_car = document.getElementById('id_team_car');
-            team_car.style.display = "none";
-
+            teamCar.style.display = "none";
         } else {
-            console.log('show');
-            const team_car = document.getElementById('id_team_car');
-            team_car.style.display = "block";
-         };
-    })
-
-    document.getElementById('id_project_name').addEventListener('change', function() {
-        const project = this.options[this.selectedIndex].text;
-        fetch(`/get-sections/${project}`)
-            .then(response => response.json())
-            .then(data => {
-                const sectionSelect = document.getElementById('id_project_section');
-                sectionSelect.innerHTML = '';
-                data.projects.forEach(section => {
-                    const option = document.createElement('option');
-                    option.value = section;
-                    option.textContent = section;
-                    sectionSelect.appendChild(option);
-                });
-            });
+            teamCar.style.display = "block";
+        }
     });
 </script>
 </body>
