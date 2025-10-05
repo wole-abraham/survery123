@@ -80,6 +80,95 @@
         .site_supervisor_row .form-group {
             flex: 1;
         }
+
+        /* Loading Animation Styles */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        .loading-spinner {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #007bff;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            color: #333;
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        /* File Upload Progress */
+        .file-upload-progress {
+            margin-top: 10px;
+            display: none;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background-color: #e9ecef;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #007bff, #0056b3);
+            width: 0%;
+            transition: width 0.3s ease;
+            border-radius: 10px;
+        }
+
+        .progress-text {
+            text-align: center;
+            margin-top: 5px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        /* Disabled form state */
+        .form-disabled {
+            opacity: 0.6;
+            pointer-events: none;
+        }
+
+        /* Success message */
+        .success-message {
+            background-color: #d4edda;
+            color: #155724;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            border: 1px solid #c3e6cb;
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -216,15 +305,40 @@
         </div>
 
         <label for="photos">Upload Photos:</label>
-        <input type="file" name="photos" multiple class="form-control">
+        <input type="file" name="photos" multiple class="form-control" id="photos-input">
+        <div class="file-upload-progress" id="photos-progress">
+            <div class="progress-bar">
+                <div class="progress-fill" id="photos-progress-fill"></div>
+            </div>
+            <div class="progress-text" id="photos-progress-text">0%</div>
+        </div>
 
         <label for="videos">Upload Videos:</label>
-        <input type="file" name="videos" multiple class="form-control">
+        <input type="file" name="videos" multiple class="form-control" id="videos-input">
+        <div class="file-upload-progress" id="videos-progress">
+            <div class="progress-bar">
+                <div class="progress-fill" id="videos-progress-fill"></div>
+            </div>
+            <div class="progress-text" id="videos-progress-text">0%</div>
+        </div>
 
         <div class="text-center">
-            <button type="submit" class="btn btn-primary">Submit</button>
+            <button type="submit" class="btn btn-primary" id="submit-btn">Submit</button>
         </div>
     </form>
+</div>
+
+<!-- Loading Overlay -->
+<div class="loading-overlay" id="loading-overlay">
+    <div class="loading-spinner">
+        <div class="spinner"></div>
+        <div class="loading-text" id="loading-text">Submitting form...</div>
+    </div>
+</div>
+
+<!-- Success Message -->
+<div class="success-message" id="success-message">
+    <strong>Success!</strong> Your activity report has been submitted successfully.
 </div>
 
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
@@ -294,6 +408,85 @@
         } else {
             teamCar.style.display = "block";
         }
+    });
+
+    // File upload progress simulation
+    function simulateFileUploadProgress(inputId, progressId, progressFillId, progressTextId) {
+        const input = document.getElementById(inputId);
+        const progress = document.getElementById(progressId);
+        const progressFill = document.getElementById(progressFillId);
+        const progressText = document.getElementById(progressTextId);
+        
+        input.addEventListener('change', function() {
+            if (this.files.length > 0) {
+                progress.style.display = 'block';
+                
+                // Simulate upload progress
+                let progressValue = 0;
+                const interval = setInterval(() => {
+                    progressValue += Math.random() * 15;
+                    if (progressValue >= 100) {
+                        progressValue = 100;
+                        clearInterval(interval);
+                        setTimeout(() => {
+                            progress.style.display = 'none';
+                        }, 1000);
+                    }
+                    
+                    progressFill.style.width = progressValue + '%';
+                    progressText.textContent = Math.round(progressValue) + '%';
+                }, 200);
+            }
+        });
+    }
+
+    // Initialize file upload progress for photos and videos
+    simulateFileUploadProgress('photos-input', 'photos-progress', 'photos-progress-fill', 'photos-progress-text');
+    simulateFileUploadProgress('videos-input', 'videos-progress', 'videos-progress-fill', 'videos-progress-text');
+
+    // Form submission with loading animation
+    document.querySelector('form').addEventListener('submit', function(e) {
+        const submitBtn = document.getElementById('submit-btn');
+        const loadingOverlay = document.getElementById('loading-overlay');
+        const loadingText = document.getElementById('loading-text');
+        const form = this;
+        
+        // Show loading overlay
+        loadingOverlay.style.display = 'flex';
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Submitting...';
+        form.classList.add('form-disabled');
+        
+        // Update loading text based on file uploads
+        const photosInput = document.getElementById('photos-input');
+        const videosInput = document.getElementById('videos-input');
+        
+        if (photosInput.files.length > 0 || videosInput.files.length > 0) {
+            loadingText.textContent = 'Uploading files and submitting form...';
+        } else {
+            loadingText.textContent = 'Submitting form...';
+        }
+        
+        // Simulate progress for better UX
+        let progress = 0;
+        const progressInterval = setInterval(() => {
+            progress += Math.random() * 20;
+            if (progress >= 90) {
+                progress = 90;
+                clearInterval(progressInterval);
+            }
+            
+            if (progress < 30) {
+                loadingText.textContent = 'Validating form data...';
+            } else if (progress < 60) {
+                loadingText.textContent = 'Processing submission...';
+            } else if (progress < 90) {
+                loadingText.textContent = 'Finalizing...';
+            }
+        }, 500);
+        
+        // The form will continue with normal submission
+        // The loading overlay will be hidden when the page redirects or reloads
     });
 </script>
 </body>

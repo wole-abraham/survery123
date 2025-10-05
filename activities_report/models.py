@@ -22,6 +22,7 @@ class Activities(models.Model):
     machines = models.JSONField(default=list, null=True)
     machines_source = models.JSONField(default=list, null=True)
     team_car = models.CharField(choices=choices.team_cars, max_length=50, null=True)
+    team_car_option = models.CharField(choices=[('yes', 'Yes'), ('no', 'no')], max_length=10, null=True)
     subcontractor_name = models.CharField(choices=choices.subcontractor_names, max_length=50, null=True)
 
     def __str__(self):

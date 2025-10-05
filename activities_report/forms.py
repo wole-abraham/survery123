@@ -26,7 +26,7 @@ class Survey(forms.ModelForm):
     machines = forms.ChoiceField(choices=machines, required=False)
     machines_source = forms.ChoiceField(choices=sources, required=False)
     team_car = forms.ChoiceField(choices=team_cars, required=False)
-    team_car_option = forms.ChoiceField(choices=[('yes', 'Yes'), ('no', 'no')])
+    # team_car_option is now in the model, no need to redefine
     supervision = forms.ChoiceField(choices=party, required=False)
     # project_section is already included from the model, no need to redefine
 
