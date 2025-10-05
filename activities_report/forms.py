@@ -1,12 +1,12 @@
 from django import forms
 from .models import Activities, ActivityPhoto, ActivityVideo
-from .choices import activitiess, supervisor,engineers, team_cars, project_sections
+from .choices import activitiess, supervisor, engineers, team_cars, project_sections, machines, sources, party
 
 
 class Survey(forms.ModelForm):
     class Meta:
         model = Activities
-        fields = '__all__'
+        exclude = ['machines', 'machines_source', 'site_engineer', 'supervisors']  # Exclude JSON fields
         widgets = {
             'date_of_activity': forms.DateTimeInput(
                 attrs={'type': 'datetime-local'},
@@ -19,12 +19,16 @@ class Survey(forms.ModelForm):
         # Ensure the input matches the desired format
         self.fields['date_of_activity'].input_formats = ['%Y-%m-%dT%H:%M']
 
+    # Custom fields for form display (not saved to model directly)
     activity_type = forms.ChoiceField(choices=activitiess, required=False)
-    supervisors = forms.ChoiceField(choices=supervisor)
-    site_engineer = forms.ChoiceField(choices=engineers)
+    supervisors = forms.ChoiceField(choices=supervisor, required=False)
+    site_engineer = forms.ChoiceField(choices=engineers, required=False)
+    machines = forms.ChoiceField(choices=machines, required=False)
+    machines_source = forms.ChoiceField(choices=sources, required=False)
     team_car = forms.ChoiceField(choices=team_cars, required=False)
     team_car_option = forms.ChoiceField(choices=[('yes', 'Yes'), ('no', 'no')])
-    project_section = forms.ChoiceField(choices=project_sections, required=True)
+    supervision = forms.ChoiceField(choices=party, required=False)
+    # project_section is already included from the model, no need to redefine
 
 class ActivityPhotoForm(forms.ModelForm):
     class Meta:

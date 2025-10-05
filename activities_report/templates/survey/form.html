@@ -234,6 +234,16 @@
     function duplicateMachineOwner() {
         const original = document.querySelector('.machine_owner');
         const clone = original.cloneNode(true);
+        const timestamp = Date.now();
+        
+        // Update field names to be unique
+        clone.querySelectorAll('select[name="machines"]').forEach(select => {
+            select.name = `machines_${timestamp}`;
+        });
+        clone.querySelectorAll('select[name="machines_source"]').forEach(select => {
+            select.name = `machines_source_${timestamp}`;
+        });
+        
         clone.querySelectorAll('input, select').forEach(input => input.value = '');
         document.querySelector('#machine_owner').appendChild(clone);
     }
@@ -241,6 +251,16 @@
     function duplicateSiteEngineer() {
         const original = document.querySelector('.site_engineer_row');
         const clone = original.cloneNode(true);
+        const timestamp = Date.now();
+        
+        // Update field names to be unique
+        clone.querySelectorAll('select[name="site_engineer"]').forEach(select => {
+            select.name = `site_engineer_${timestamp}`;
+        });
+        clone.querySelectorAll('select[name="supervision"]').forEach(select => {
+            select.name = `supervision_${timestamp}`;
+        });
+        
         clone.querySelectorAll('input, select').forEach(input => input.value = '');
         document.querySelector('#site_engineers').appendChild(clone);
     }
@@ -248,6 +268,16 @@
     function duplicateSiteSupervisor() {
         const original = document.querySelector('.site_supervisor_row');
         const clone = original.cloneNode(true);
+        const timestamp = Date.now();
+        
+        // Update field names to be unique
+        clone.querySelectorAll('select[name="supervisors"]').forEach(select => {
+            select.name = `supervisors_${timestamp}`;
+        });
+        clone.querySelectorAll('select[name="supervision"]').forEach(select => {
+            select.name = `supervision_${timestamp}`;
+        });
+        
         clone.querySelectorAll('input, select').forEach(input => input.value = '');
         document.querySelector('#site_supervisors').appendChild(clone);
     }

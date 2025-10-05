@@ -100,6 +100,50 @@
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
 
+        /* Multiple Selections Styling */
+        .report-section {
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #28a745;
+        }
+
+        .report-section h3 {
+            color: #28a745;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        .selection-group {
+            margin-bottom: 15px;
+            padding: 10px;
+            background-color: white;
+            border-radius: 6px;
+            border: 1px solid #e9ecef;
+        }
+
+        .selection-group h4 {
+            color: #495057;
+            margin-bottom: 8px;
+            font-size: 1.1em;
+        }
+
+        .selection-group ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .selection-group li {
+            padding: 5px 10px;
+            margin: 3px 0;
+            background-color: #e3f2fd;
+            border-radius: 4px;
+            color: #1976d2;
+            font-weight: 500;
+        }
+
         /* Footer Styling (for additional info or links) */
         footer {
             text-align: center;
@@ -121,9 +165,72 @@
             <div class="report-header">
                 <ul class="report-details">
                     <li><strong>Date of Activity:</strong> {{ report.date_of_activity }}</li>
+                    <li><strong>Project Name:</strong> {{ report.project_name }}</li>
+                    <li><strong>Project Section:</strong> {{ report.project_section }}</li>
                     <li><strong>Planned Activity Category:</strong> {{ report.planned_activity_category }}</li>
+                    <li><strong>Activity Type:</strong> {{ report.activity_type }}</li>
+                    <li><strong>Chainage:</strong> {{ report.chainage }}</li>
+                    <li><strong>Chainage 2:</strong> {{ report.chainage2 }}</li>
+                    <li><strong>Fullname:</strong> {{ report.fullname }}</li>
+                    <li><strong>Role:</strong> {{ report.role }}</li>
+                    <li><strong>Team Car:</strong> {{ report.team_car }}</li>
+                    <li><strong>Subcontractor Name:</strong> {{ report.subcontractor_name }}</li>
+                    <li><strong>Activity Supervision:</strong> {{ report.party }}</li>
                     <li><strong>Comment:</strong> {{ report.comment }}</li>
                 </ul>
+            </div>
+
+            <!-- Multiple Selections Display -->
+            <div class="report-section">
+                <h3>Multiple Selections</h3>
+                
+                <!-- Machines -->
+                {% if report.machines %}
+                <div class="selection-group">
+                    <h4>Machines:</h4>
+                    <ul>
+                        {% for machine in report.machines %}
+                            <li>{{ machine }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% endif %}
+
+                <!-- Machine Sources -->
+                {% if report.machines_source %}
+                <div class="selection-group">
+                    <h4>Machine Sources:</h4>
+                    <ul>
+                        {% for source in report.machines_source %}
+                            <li>{{ source }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% endif %}
+
+                <!-- Site Engineers -->
+                {% if report.site_engineer %}
+                <div class="selection-group">
+                    <h4>Site Engineers:</h4>
+                    <ul>
+                        {% for engineer in report.site_engineer %}
+                            <li>{{ engineer }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% endif %}
+
+                <!-- Supervisors -->
+                {% if report.supervisors %}
+                <div class="selection-group">
+                    <h4>Supervisors:</h4>
+                    <ul>
+                        {% for supervisor in report.supervisors %}
+                            <li>{{ supervisor }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% endif %}
             </div>
 
             <!-- Gallery for Images -->

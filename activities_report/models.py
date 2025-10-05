@@ -19,8 +19,8 @@ class Activities(models.Model):
     supervisors = models.JSONField(default=list, null=True)
     party = models.CharField(choices=choices.party, max_length=100, null=True)
     supervision = models.CharField(choices=choices.party, max_length=100, null=True)
-    machines = models.CharField(choices=choices.machines, max_length=100, null=True)
-    machines_source = models.CharField(choices=choices.sources, max_length=100, null=True)
+    machines = models.JSONField(default=list, null=True)
+    machines_source = models.JSONField(default=list, null=True)
     team_car = models.CharField(choices=choices.team_cars, max_length=50, null=True)
     subcontractor_name = models.CharField(choices=choices.subcontractor_names, max_length=50, null=True)
 
@@ -39,4 +39,4 @@ class ActivityVideo(models.Model):
     video = models.FileField(upload_to='videos/')
 
     def __str__(self):
-        return f"Video for {sel} {self.activity.project_name} - {self.activity.date_of_activity}"
+        return f"Video for {self.activity.project_name} - {self.activity.date_of_activity}"

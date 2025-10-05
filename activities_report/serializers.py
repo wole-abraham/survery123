@@ -7,14 +7,14 @@ class ActivityPhotoSerializer(serializers.ModelSerializer):
         fields = ['id', 'image', 'activity_id']
 
 class ActivityVideoSerializer(serializers.ModelSerializer):
-        class Meta:
-            model = ActivityVideo
-            fields = ['id', 'video', 'activity_id']
+    class Meta:
+        model = ActivityVideo
+        fields = ['id', 'video', 'activity_id']
     
 class ActivitySerializer(serializers.ModelSerializer):
-        photos = ActivityPhotoSerializer(many=True, read_only=True)
-        videos = ActivityVideoSerializer(many=True, read_only=True)
+    photos = ActivityPhotoSerializer(many=True, read_only=True)
+    videos = ActivityVideoSerializer(many=True, read_only=True)
 
-        class Meta:
-              model = Activities
-              fields = '__all__'
+    class Meta:
+        model = Activities
+        fields = '__all__'

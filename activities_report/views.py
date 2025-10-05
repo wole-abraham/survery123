@@ -12,13 +12,62 @@ def page(request):
         print(request.POST)
         if survey_form.is_valid():
             # Save the activity
-
+            activity = survey_form.save(commit=False)
+            
+            # Handle team car logic
             if survey_form.cleaned_data.get('team_car_option') == 'no':
-                activity = survey_form.save(commit=False)
                 activity.team_car = None
-                activity.save()
-            else:
-                activity = survey_form.save()
+            
+            # Collect multiple machines from duplicated fields
+            machines = []
+            machines_sources = []
+            for key, value in request.POST.items():
+                if key.startswith('machines_') and value:
+                    machines.append(value)
+                elif key.startswith('machines_source_') and value:
+                    machines_sources.append(value)
+            
+            # Also get the original machine fields
+            if request.POST.get('machines'):
+                machines.append(request.POST.get('machines'))
+            if request.POST.get('machines_source'):
+                machines_sources.append(request.POST.get('machines_source'))
+            
+            # Store machines as JSON
+            if machines:
+                activity.machines = machines
+            if machines_sources:
+                activity.machines_source = machines_sources
+            
+            # Collect multiple site engineers from duplicated fields
+            site_engineers = []
+            for key, value in request.POST.items():
+                if key.startswith('site_engineer_') and value:
+                    site_engineers.append(value)
+            
+            # Also get the original site_engineer field
+            if request.POST.get('site_engineer'):
+                site_engineers.append(request.POST.get('site_engineer'))
+            
+            # Store site engineers as JSON
+            if site_engineers:
+                activity.site_engineer = site_engineers
+            
+            # Collect multiple supervisors from duplicated fields
+            supervisors = []
+            for key, value in request.POST.items():
+                if key.startswith('supervisors_') and value:
+                    supervisors.append(value)
+            
+            # Also get the original supervisors field
+            if request.POST.get('supervisors'):
+                supervisors.append(request.POST.get('supervisors'))
+            
+            # Store supervisors as JSON
+            if supervisors:
+                activity.supervisors = supervisors
+            
+            activity.save()
 
             # Handle photo uploads
             for file in request.FILES.getlist('photos'):
