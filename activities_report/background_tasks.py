@@ -2,7 +2,7 @@ import threading
 import logging
 import os
 from django.conf import settings
-from .file_upload_utils import upload_file_to_gdrive, create_photo_record, create_video_record
+from .file_upload_utils import upload_file_to_gdrive, create_photo_record, create_video_record, upload_file_to_gdrive_from_content
 from .models import ActivityPhoto, ActivityVideo
 
 logger = logging.getLogger(__name__)
@@ -108,10 +108,11 @@ def process_uploaded_files_direct_to_gdrive(activity, photo_files, video_files):
     def upload_task():
         try:
             # Process photos
-            for file in photo_files:
+            for file_data in prepared_photos:
                 try:
+                    file_content, file_name, file_type = file_data
                     # Upload directly to Google Drive
-                    gdrive_info = upload_file_to_gdrive(file, activity.id, 'photo')
+                    gdrive_info = upload_file_to_gdrive_from_content(file_content, file_name, activity.id, 'photo')
                     
                     if gdrive_info:
                         # Create record with Google Drive info only
@@ -122,18 +123,19 @@ def process_uploaded_files_direct_to_gdrive(activity, photo_files, video_files):
                             gdrive_web_content_link=gdrive_info.get('web_content_link'),
                             gdrive_file_name=gdrive_info.get('file_name')
                         )
-                        logger.info(f"Created photo record with Google Drive info: {file.name}")
+                        logger.info(f"Created photo record with Google Drive info: {file_name}")
                     else:
-                        logger.error(f"Failed to upload photo to Google Drive: {file.name}")
+                        logger.error(f"Failed to upload photo to Google Drive: {file_name}")
                         
                 except Exception as e:
-                    logger.error(f"Error uploading photo {file.name} to Google Drive: {str(e)}")
+                    logger.error(f"Error uploading photo {file_name} to Google Drive: {str(e)}")
             
             # Process videos
-            for file in video_files:
+            for file_data in prepared_videos:
                 try:
+                    file_content, file_name, file_type = file_data
                     # Upload directly to Google Drive
-                    gdrive_info = upload_file_to_gdrive(file, activity.id, 'video')
+                    gdrive_info = upload_file_to_gdrive_from_content(file_content, file_name, activity.id, 'video')
                     
                     if gdrive_info:
                         # Create record with Google Drive info only
@@ -144,21 +146,44 @@ def process_uploaded_files_direct_to_gdrive(activity, photo_files, video_files):
                             gdrive_web_content_link=gdrive_info.get('web_content_link'),
                             gdrive_file_name=gdrive_info.get('file_name')
                         )
-                        logger.info(f"Created video record with Google Drive info: {file.name}")
+                        logger.info(f"Created video record with Google Drive info: {file_name}")
                     else:
-                        logger.error(f"Failed to upload video to Google Drive: {file.name}")
+                        logger.error(f"Failed to upload video to Google Drive: {file_name}")
                         
                 except Exception as e:
-                    logger.error(f"Error uploading video {file.name} to Google Drive: {str(e)}")
+                    logger.error(f"Error uploading video {file_name} to Google Drive: {str(e)}")
                     
         except Exception as e:
             logger.error(f"Direct upload task failed: {str(e)}")
     
+    # Prepare file data for background processing
+    prepared_photos = []
+    prepared_videos = []
+    
+    # Read file content into memory before starting background thread
+    for file in photo_files:
+        try:
+            file.seek(0)  # Reset file pointer
+            file_content = file.read()
+            prepared_photos.append((file_content, file.name, file.content_type))
+            logger.info(f"Prepared photo for upload: {file.name}")
+        except Exception as e:
+            logger.error(f"Error reading photo file {file.name}: {str(e)}")
+    
+    for file in video_files:
+        try:
+            file.seek(0)  # Reset file pointer
+            file_content = file.read()
+            prepared_videos.append((file_content, file.name, file.content_type))
+            logger.info(f"Prepared video for upload: {file.name}")
+        except Exception as e:
+            logger.error(f"Error reading video file {file.name}: {str(e)}")
+    
     # Start the background task
-    if (photo_files or video_files) and getattr(settings, 'GOOGLE_DRIVE_ENABLED', False):
+    if (prepared_photos or prepared_videos) and getattr(settings, 'GOOGLE_DRIVE_ENABLED', False):
         thread = threading.Thread(target=upload_task)
         thread.daemon = True
         thread.start()
-        logger.info(f"Started direct Google Drive upload for {len(photo_files)} photos and {len(video_files)} videos")
+        logger.info(f"Started direct Google Drive upload for {len(prepared_photos)} photos and {len(prepared_videos)} videos")
     else:
         logger.info("Google Drive integration disabled or no files to upload")

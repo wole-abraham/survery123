@@ -115,3 +115,52 @@ def create_video_record(activity, file, gdrive_info=None):
     
     video.save()
     return video
+
+def upload_file_to_gdrive_from_content(file_content, file_name, activity_id, file_type='photo'):
+    """
+    Upload file content to Google Drive and return the file information
+    
+    Args:
+        file_content: File content as bytes
+        file_name: Name of the file
+        activity_id: ID of the activity this file belongs to
+        file_type: Type of file ('photo' or 'video')
+    
+    Returns:
+        dict: Contains Google Drive file information or None if upload fails
+    """
+    try:
+        # Check if Google Drive is enabled
+        if not getattr(settings, 'GOOGLE_DRIVE_ENABLED', False):
+            logger.info("Google Drive integration is disabled")
+            return None
+        
+        # Create a temporary file to store the file content
+        with tempfile.NamedTemporaryFile(delete=False, suffix=os.path.splitext(file_name)[1]) as temp_file:
+            temp_file.write(file_content)
+            temp_file_path = temp_file.name
+        
+        try:
+            # Generate a unique filename for Google Drive
+            gdrive_filename = f"activity_{activity_id}_{file_type}_{file_name}"
+            
+            # Upload to Google Drive
+            gdrive_service = get_gdrive_service()
+            gdrive_info = gdrive_service.upload_file(
+                file_path=temp_file_path,
+                file_name=gdrive_filename
+            )
+            
+            logger.info(f"Successfully uploaded {file_name} to Google Drive")
+            return gdrive_info
+            
+        finally:
+            # Clean up temporary file
+            try:
+                os.unlink(temp_file_path)
+            except OSError:
+                logger.warning(f"Could not delete temporary file: {temp_file_path}")
+                
+    except Exception as e:
+        logger.error(f"Error uploading file content to Google Drive: {str(e)}")
+        return None
