@@ -129,3 +129,7 @@ STATIC_URL = '/static/'
 STATIC_ROOT = '/home/devwole/survery123/static'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+# Google Drive Configuration
+GOOGLE_DRIVE_CREDENTIALS_PATH = os.path.join(BASE_DIR, 'google_drive_credentials.json')
+GOOGLE_DRIVE_ENABLED = True  # Set to False to disable Google Drive integration

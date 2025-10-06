@@ -235,23 +235,41 @@
 
             <!-- Gallery for Images -->
             <div class="gallery">
-                {% for image in report.activityphoto_set.all %}
-                    <img src="{{ image.image.url }}" alt="Activity Photo">
+                {% for image in report.photos.all %}
+                    {% if image.file_url %}
+                        <a href="{{ image.file_url }}" target="_blank">
+                            <img src="{% if image.gdrive_web_content_link %}{{ image.gdrive_web_content_link }}{% else %}{{ image.image.url }}{% endif %}" alt="Activity Photo">
+                        </a>
+                    {% endif %}
                 {% endfor %}
             </div>
 
             <!-- Video (if exists) -->
-            <!-- {% if report.videos.all %}
+            {% if report.videos.all %}
                 <div class="video">
-                    <h3>Activity Video</h3>
+                    <h3>Activity Videos</h3>
                     {% for video in report.videos.all %}
-                        <video controls>
-                            <source src="{{ video.video.url }}" type="video/mp4">
-                            Your browser does not support the video tag.
-                        </video>
+                        {% if video.file_url %}
+                            <div style="margin-bottom: 20px;">
+                                <a href="{{ video.file_url }}" target="_blank" style="display: inline-block; padding: 10px 20px; background-color: #28a745; color: white; text-decoration: none; border-radius: 5px; margin-bottom: 10px;">
+                                    View Video: {{ video.gdrive_file_name|default:"Video" }}
+                                </a>
+                                {% if video.gdrive_web_content_link %}
+                                    <video controls style="max-width: 100%; border-radius: 8px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);">
+                                        <source src="{{ video.gdrive_web_content_link }}" type="video/mp4">
+                                        Your browser does not support the video tag.
+                                    </video>
+                                {% elif video.video %}
+                                    <video controls style="max-width: 100%; border-radius: 8px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);">
+                                        <source src="{{ video.video.url }}" type="video/mp4">
+                                        Your browser does not support the video tag.
+                                    </video>
+                                {% endif %}
+                            </div>
+                        {% endif %}
                     {% endfor %}
                 </div>
-            {% endif %} -->
+            {% endif %}
         </div>
         {% endfor %}
     </div>

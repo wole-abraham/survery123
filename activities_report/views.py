@@ -4,6 +4,11 @@ from .models import Activities, ActivityPhoto, ActivityVideo
 from django.http import HttpResponse
 from .choices import activities, project_section
 from django.http import JsonResponse
+from .background_tasks import process_uploaded_files_background
+from django.conf import settings
+import logging
+
+logger = logging.getLogger(__name__)
 
 def page(request):
 
@@ -69,13 +74,13 @@ def page(request):
             
             activity.save()
 
-            # Handle photo uploads
-            for file in request.FILES.getlist('photos'):
-                ActivityPhoto.objects.create(activity=activity, image=file)
-
-            # Handle video uploads
-            for file in request.FILES.getlist('videos'):
-                ActivityVideo.objects.create(activity=activity, video=file)
+            # Process file uploads in background for faster response
+            photo_files = request.FILES.getlist('photos')
+            video_files = request.FILES.getlist('videos')
+            
+            if photo_files or video_files:
+                process_uploaded_files_background(activity, photo_files, video_files)
+                logger.info(f"Started background processing for {len(photo_files)} photos and {len(video_files)} videos")
 
             return redirect('submitted')  # Replace with your desired success URL
         else:
@@ -121,7 +126,12 @@ class ActivityPhotoViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         activity = Activities.objects.get(id=self.kwargs['activity_id'])
-        serializer.save(activity=activity)
+        photo = serializer.save(activity=activity)
+        
+        # Process Google Drive upload in background
+        if photo.image and getattr(settings, 'GOOGLE_DRIVE_ENABLED', False):
+            from .background_tasks import upload_files_to_gdrive_background
+            upload_files_to_gdrive_background(activity, [(photo.image, 'photo')])
 
 class ActivityVideoViewSet(viewsets.ModelViewSet):
     queryset = ActivityVideo.objects.all()
@@ -129,4 +139,9 @@ class ActivityVideoViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         activity = Activities.objects.get(id=self.kwargs['activity_id'])
-        serializer.save(activity=activity)
+        video = serializer.save(activity=activity)
+        
+        # Process Google Drive upload in background
+        if video.video and getattr(settings, 'GOOGLE_DRIVE_ENABLED', False):
+            from .background_tasks import upload_files_to_gdrive_background
+            upload_files_to_gdrive_background(activity, [(video.video, 'video')])

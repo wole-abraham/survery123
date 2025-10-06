@@ -30,14 +30,70 @@ class Activities(models.Model):
     
 class ActivityPhoto(models.Model):
     activity = models.ForeignKey(Activities, on_delete=models.CASCADE, related_name='photos')
-    image = models.ImageField(upload_to='photos/')
+    # Keep original field for backward compatibility during migration
+    image = models.ImageField(upload_to='photos/', null=True, blank=True)
+    
+    # Google Drive fields
+    gdrive_file_id = models.CharField(max_length=255, null=True, blank=True, help_text="Google Drive file ID")
+    gdrive_web_view_link = models.URLField(null=True, blank=True, help_text="Google Drive web view link")
+    gdrive_web_content_link = models.URLField(null=True, blank=True, help_text="Google Drive direct view link")
+    gdrive_file_name = models.CharField(max_length=255, null=True, blank=True, help_text="Original file name")
+    
+    # Local file path for temporary storage during upload
+    local_file_path = models.CharField(max_length=500, null=True, blank=True, help_text="Temporary local file path")
 
     def __str__(self):
         return f"photo for {self.activity.id} {self.activity.project_name}  - {self.activity.date_of_activity}"
+    
+    @property
+    def file_url(self):
+        """Return the appropriate file URL (Google Drive or local)"""
+        if self.gdrive_web_view_link:
+            return self.gdrive_web_view_link
+        elif self.image:
+            return self.image.url
+        return None
+    
+    @property
+    def view_url(self):
+        """Return the direct view URL"""
+        if self.gdrive_web_content_link:
+            return self.gdrive_web_content_link
+        elif self.image:
+            return self.image.url
+        return None
 
 class ActivityVideo(models.Model):
     activity = models.ForeignKey(Activities, on_delete=models.CASCADE, related_name='videos')
-    video = models.FileField(upload_to='videos/')
+    # Keep original field for backward compatibility during migration
+    video = models.FileField(upload_to='videos/', null=True, blank=True)
+    
+    # Google Drive fields
+    gdrive_file_id = models.CharField(max_length=255, null=True, blank=True, help_text="Google Drive file ID")
+    gdrive_web_view_link = models.URLField(null=True, blank=True, help_text="Google Drive web view link")
+    gdrive_web_content_link = models.URLField(null=True, blank=True, help_text="Google Drive direct view link")
+    gdrive_file_name = models.CharField(max_length=255, null=True, blank=True, help_text="Original file name")
+    
+    # Local file path for temporary storage during upload
+    local_file_path = models.CharField(max_length=500, null=True, blank=True, help_text="Temporary local file path")
 
     def __str__(self):
         return f"Video for {self.activity.project_name} - {self.activity.date_of_activity}"
+    
+    @property
+    def file_url(self):
+        """Return the appropriate file URL (Google Drive or local)"""
+        if self.gdrive_web_view_link:
+            return self.gdrive_web_view_link
+        elif self.video:
+            return self.video.url
+        return None
+    
+    @property
+    def download_url(self):
+        """Return the direct download URL"""
+        if self.gdrive_web_content_link:
+            return self.gdrive_web_content_link
+        elif self.video:
+            return self.video.url
+        return None
